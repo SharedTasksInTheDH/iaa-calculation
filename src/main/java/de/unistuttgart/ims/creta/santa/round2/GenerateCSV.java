@@ -34,7 +34,9 @@ public class GenerateCSV {
 		annotatorId = m.group(2);
 
 		JCasLoader worker = new JCasLoader(options.getInput(), new DefaultIOPlugin(), options.getLanguage(),
-				new ExportAsCSV(options.getOutput(), annotatorId), jcas -> {
+				new ExportAsCSV(new File(options.getOutputDirectory(), m.group(1) + "_" + annotatorId + ".csv"),
+						annotatorId),
+				jcas -> {
 					System.err.println("An error ocurrced");
 				});
 		worker.execute();
@@ -74,7 +76,7 @@ public class GenerateCSV {
 		File getInput();
 
 		@Option
-		File getOutput();
+		File getOutputDirectory();
 
 		@Option(defaultValue = "de")
 		String getLanguage();
