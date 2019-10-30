@@ -26,18 +26,21 @@ public class GenerateCSV {
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		options = CliFactory.parseArguments(Options.class, args);
 
-		Pattern p = Pattern.compile("^(\\p{Digit}\\p{Digit}_.*)_(\\p{javaUpperCase}\\p{javaUpperCase}).xmi.gz$",
+		Pattern p = Pattern.compile("^(\\p{Digit}\\p{Digit}_.*)_(\\p{javaUpperCase}\\p{javaUpperCase}).xmi(.gz)?$",
 				Pattern.UNICODE_CHARACTER_CLASS);
 		String annotatorId = options.getInput().getName();
 		Matcher m = p.matcher(annotatorId);
-		m.find();
+		if (!m.find()) {
+			System.err.println("    File name could not be parsed: " + annotatorId);
+			System.exit(1);
+		}
 		annotatorId = m.group(2);
 
 		JCasLoader worker = new JCasLoader(options.getInput(), new DefaultIOPlugin(), options.getLanguage(),
 				new ExportAsCSV(new File(options.getOutputDirectory(), m.group(1) + "_" + annotatorId + ".csv"),
 						annotatorId),
 				jcas -> {
-					System.err.println("An error ocurrced");
+					System.err.println("    An error ocurrced");
 				});
 		worker.execute();
 
