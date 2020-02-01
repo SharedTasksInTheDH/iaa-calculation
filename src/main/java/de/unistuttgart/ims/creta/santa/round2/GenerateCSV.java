@@ -84,6 +84,10 @@ public class GenerateCSV {
 			// remove space around =
 			s = s.replaceAll(" *= *", "=");
 
+			// only first part (SANTA5)
+			if (s.contains("|"))
+				s = s.substring(0, s.indexOf('|'));
+
 			return s;
 		}
 
