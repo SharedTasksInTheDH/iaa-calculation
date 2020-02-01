@@ -16,6 +16,7 @@ import org.apache.uima.jcas.JCas;
 import com.lexicalscope.jewel.cli.CliFactory;
 import com.lexicalscope.jewel.cli.Option;
 
+import de.unistuttgart.ims.coref.annotator.api.v1.Entity;
 import de.unistuttgart.ims.coref.annotator.api.v1.Mention;
 import de.unistuttgart.ims.coref.annotator.plugins.DefaultIOPlugin;
 import de.unistuttgart.ims.coref.annotator.worker.JCasLoader;
@@ -64,11 +65,26 @@ public class GenerateCSV {
 				int i = 0;
 				for (Mention m : JCasUtil.select(jcas, Mention.class)) {
 					String key = this.annotatorId + String.valueOf(i++);
-					p.printRecord(key, this.annotatorId, m.getEntity().getLabel(), null, m.getBegin(), m.getEnd());
+					p.printRecord(key, this.annotatorId, toString(m.getEntity()), null, m.getBegin(), m.getEnd());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+
+		String toString(Entity e) {
+			String s = e.getLabel();
+
+			// all lower case
+			s = s.toLowerCase();
+
+			// remove quotes and commas
+			s = s.replaceAll("[\",]", "");
+
+			// remove space around =
+			s = s.replaceAll(" *= *", "=");
+
+			return s;
 		}
 
 	}
