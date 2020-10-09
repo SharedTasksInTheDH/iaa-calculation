@@ -79,7 +79,7 @@ public class GenerateCSV {
 			s = s.toLowerCase();
 
 			// remove quotes and commas
-			s = s.replaceAll("[\",]", "");
+			s = s.replaceAll("[\"””,]", "");
 
 			// remove space around =
 			s = s.replaceAll(" *= *", "=");
@@ -87,6 +87,10 @@ public class GenerateCSV {
 			// only first part (SANTA5)
 			if (s.contains("|"))
 				s = s.substring(0, s.indexOf('|'));
+
+			if (s.startsWith("character_")) {
+				s.replaceFirst("character_", "characters_");
+			}
 
 			return s;
 		}

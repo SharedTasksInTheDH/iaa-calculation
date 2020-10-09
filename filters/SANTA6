@@ -1,1 +1,1 @@
-narrative_level
+narrative_level number=\d+,

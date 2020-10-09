@@ -44,7 +44,7 @@ do
 		for i in $TEXTS
 		do
 			echo "    $i"
-			grep $FILTER_EXPRESSION $SOURCEDIR/$S/$i.csv > $TEMPDIR/$S/$i.csv
+			grep -E "$FILTER_EXPRESSION" $SOURCEDIR/$S/$i.csv > $TEMPDIR/$S/$i.csv
 		done
 	else
 		for i in $TEXTS
@@ -79,7 +79,7 @@ do
 	for t in $TEXTS
 	do
 		echo -n "    $t"
-		SCORE=$(head -n 1 $TARGETDIR/$s/$t.gamma.txt | head -c 8)
+		SCORE=$(head -n 1 $TARGETDIR/$s/$t.gamma.txt | perl -e 'printf("%.8f", <STDIN>)')
 		echo ": $SCORE"
 		NUM=$(bc <<< "$NUM + 1")
 		if [[ "$SCORE" != "NaN" && "$SCORE" != "" ]]
